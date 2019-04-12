@@ -1,0 +1,63 @@
+body {
+    padding: 2em;
+}
+#container {
+    width: 600px;
+    height: 600px;
+    border: 1px solid #000;
+    position: relative;
+}
+#center {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: absolute;
+    left: 295px;
+    top: 295px;
+    background: #000;
+}
+.field {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    background: #f00;
+}
+/*#crosshair-x {
+    width: 600px; height: 1px; background: #000; position: absolute; left: 0; top: 300px;
+}
+#crosshair-y {
+    width: 1px; height: 600px; background: #000; position: absolute; left: 300px; top: 0;
+}*/
+
+/*
+.circle {
+    width: 200px;
+    height: 200px;
+    background: pink;
+
+}
+
+.circle .tick {
+    width: 10px;
+    height: 10px;
+    background: #000;
+    position: absolute;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    margin-left: -5px;
+    margin-top: -5px;
+}
+
+.circle .tick:nth-child(1) {
+    transform: rotate(0deg) translate(100px);
+}
+.circle .tick:nth-child(2) {
+    transform: rotate(90deg) translate(100px);
+}
+.circle .tick:nth-child(3) {
+    transform: rotate(180deg) translate(100px);
+}
+.circle .tick:nth-child(4) {
+    transform: rotate(270deg) translate(100px);
+}*/
