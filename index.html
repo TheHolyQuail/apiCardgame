@@ -9,16 +9,22 @@
         <link rel="stylesheet" href="styles.css">
     </head>
 
-    <body>
+    <body onload="load()">
         <div>
-            <button id="start">play game</button>
+            <button class="controls" id="start">play game</button>
         </div>
-        <div id="player select">
+
+        <div id="playerSelect">
         Number of players: <input type="text" value="3" />
-        </div><div id="container">
+        </div>
+
+        <div id="container">
             <div id="center"></div>
-            <!--<div id="crosshair-x"></div>
-            <div id="crosshair-y"></div>-->
+        </div>
+
+        <div id="gameControl">
+            <button class="controls" id="hit">hit me!</button>
+            <button class="controls" id="hold">hold!</button>
         </div>
     </body>
 </html>

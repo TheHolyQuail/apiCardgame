@@ -20,13 +20,18 @@ $(document).ready(function() {
                 alert('ERROR 01: retrieval error');
             }
         });
-        $("#start").attr("display", "none");
-        $("#input").attr("display","none");
+        $("#start").hide();
+        $("#playerSelect").hide();
+        $("#gameControl").show();
     });
     $('#input').change(function() {
         players = $('#input').valueOf();
     });
 });
+
+function load() {
+    $("#gameControl").hide();
+}
 
 function startGame(res) {
     players = $('input:text').val();
@@ -48,7 +53,7 @@ function startGame(res) {
 
     //add cards to people
     for(var i = 0; i < players; i++) {
-        $('<div/>').appendTo(container);
+
     }
 }
 
@@ -60,11 +65,20 @@ function createFields() {
     $('.field').remove();
     var container = $('#container');
     for(var i = 0; i < players; i++) {
-        $('<div/>', {
-            'class': 'field',
-            'id': "player" + (i + 1).toString(),
-            'text': "player " + (i + 1).toString()
-        }).appendTo(container);
+        if(i != 0) {
+            $('<div/>', {
+                'class': 'field',
+                'id': "player" + (i + 1).toString(),
+                'text': "player " + (i + 1).toString()
+            }).appendTo(container);
+        }else {
+            //the human player is player 1
+            $('<div/>', {
+                'class': 'field',
+                'id': "player" + (i + 1).toString(),
+                'text': "You"
+            }).appendTo(container);
+        }
     }
 }
 
