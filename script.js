@@ -13,7 +13,7 @@ $(document).ready(function() {
             success: function (result) {
                 console.log(result);
                 deckID = result.deck_id;
-                getResult(result);
+                startGame(result);
                 $("#start").attr("display","none");
             },
             error: function () {
@@ -21,14 +21,15 @@ $(document).ready(function() {
             }
         });
         $("#start").attr("display", "none");
+        $("#input").attr("display","none");
     });
-    $('input').change(function() {
-        createFields();
-        distributeFields();
+    $('#input').change(function() {
+        players = $('#input').valueOf();
     });
 });
 
-function getResult(res) {
+function startGame(res) {
+    players = $('input:text').val();
     $.ajax({
         url: 'https://deckofcardsapi.com/api/deck/'+ deckID +'/draw/?count=' + players.toString(),
         type: 'GET',
@@ -41,14 +42,24 @@ function getResult(res) {
             alert('ERROR 01: retrieval error');
         }
     });
+    //creates the players and displays them
     createFields();
     distributeFields();
+
+    //add cards to people
+    for(var i = 0; i < players; i++) {
+        $('<div/>').appendTo(container);
+    }
+}
+
+function AIround(){
+    
 }
 
 function createFields() {
     $('.field').remove();
     var container = $('#container');
-    for(var i = 0; i < +$('input:text').val(); i++) {
+    for(var i = 0; i < players; i++) {
         $('<div/>', {
             'class': 'field',
             'id': "player" + (i + 1).toString(),
