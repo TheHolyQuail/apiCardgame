@@ -29,9 +29,11 @@ $(document).ready(function() {
     });
 });
 
-function load() {
+function onLoad() {
     $("#gameControl").hide();
 }
+
+
 
 function startGame(res) {
     players = $('input:text').val();
@@ -40,21 +42,67 @@ function startGame(res) {
         type: 'GET',
         crossDomain: true,
         dataType: 'json',
-        success: function (result) {
-            console.log(result);
-        },
+        success: setRes,
+
+        //     function (result) {
+        //     res = result;
+        //     console.log(res/*ult*/);
+        // },
         error: function () {
             alert('ERROR 01: retrieval error');
         }
     });
+
+}
+
+function setRes(result) {
+    console.log(res/*ult*/);
     //creates the players and displays them
     createFields();
     distributeFields();
 
-    //add cards to people
+    //create piles for people
+    var card;
     for(var i = 0; i < players; i++) {
+        card = res.cards[i].code;
 
+        if(i == 0){
+            //for the players cards (they are always visible)
+            $('<img/>', {
+                'class': 'card',
+                'id': "card" + i.toString(),
+                'src': res.cards[i].image
+            }).appendTo('#player' + (i + 1).toString());
+        }else{
+            //for the computers cards (they are not always visible)
+            $('<img/>', {
+                'class': 'card',
+                'id': "card" + i.toString(),
+                'src': res.cards[i].image
+            }).appendTo('#player' + (i + 1).toString());
+        }
+
+        $.ajax({
+            url: 'https://deckofcardsapi.com/api/deck/<<' + i.toString() + '>>/pile/<<pile_name>>/add/?cards=' + card,
+            type: 'GET',
+            crossDomain: true,
+            dataType: 'json',
+            success: function (result) {
+                console.log(result.piles[i]);
+            },
+            error: function () {
+                alert('ERROR 01: retrieval error');
+            }
+        });
     }
+}
+
+function draw(){
+
+}
+
+function end(){
+
 }
 
 function AIround(){
@@ -79,7 +127,12 @@ function createFields() {
                 'text': "You"
             }).appendTo(container);
         }
+        //make image div and use insert affter to insert it into code
     }
+}
+
+function insertAfter(newNode, referenceNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
 function distributeFields() {
@@ -164,18 +217,7 @@ Response:
     "deck_id":"3p40paa87x90",
     "remaining": 50
 }
-Reshuffle the Cards:
-https://deckofcardsapi.com/api/deck/<<deck_id>>/shuffle/
-Don't throw away a deck when all you want to do is shuffle. Include the deck_id on your call to shuffle your cards. Don't worry about reminding us how many decks you are playing with.
 
-
-Response:
-{
-    "success": true,
-    "deck_id": "3p40paa87x90",
-    "shuffled": true,
-    "remaining": 52
-}
 A Brand New Deck:
 https://deckofcardsapi.com/api/deck/new/
 Open a brand new deck of cards.
@@ -188,21 +230,7 @@ Response:
     "shuffled": false,
     "remaining": 52
 }
-A Partial Deck:
-https://deckofcardsapi.com/api/deck/new/shuffle/?cards=AS,2S,KS,AD,2D,KD,AC,2C,KC,AH,2H,KH
-If you want to use a partial deck, then you can pass the card codes you want to use using the cards parameter. Separate the card codes with commas, and each card code is a just a two character case-insensitive string:
 
-The value, one of A (for an ace), 2, 3, 4, 5, 6, 7, 8, 9, 0 (for a ten), J (jack), Q (queen), or K (king);
-The suit, one of S (Spades), D (Diamonds), C (Clubs), or H (Hearts).
-In this example, we are asking for a deck consisting of all the aces, twos, and kings.
-
-Response:
-{
-    "success": true,
-    "deck_id": "3p40paa87x90",
-    "shuffled": true,
-    "remaining": 12
-}
 Adding to Piles
 https://deckofcardsapi.com/api/deck/<<deck_id>>/pile/<<pile_name>>/add/?cards=AS,2S
 Piles can be used for discarding, players hands, or whatever else. Piles are created on the fly, just give a pile a name and add a drawn card to the pile. If the pile didn't exist before, it does now. After a card has been drawn from the deck it can be moved from pile to pile.
@@ -220,21 +248,7 @@ Response:
         }
     }
 }
-Shuffle Piles
-https://deckofcardsapi.com/api/deck/<<deck_id>>/pile/<<pile_name>>/shuffle
-Note: This will not work with multiple decks.
 
-Response:
-{
-    "success": true,
-    "deck_id": "3p40paa87x90",
-    "remaining": 12,
-    "piles": {
-        "discard": {
-            "remaining": 2
-        }
-    }
-}
 Listing Cards in Piles
 https://deckofcardsapi.com/api/deck/<<deck_id>>/pile/<<pile_name>>/list
 Note: This will not work with multiple decks.
