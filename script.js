@@ -10,12 +10,7 @@ $(document).ready(function() {
             type: 'GET',
             crossDomain: true,
             dataType: 'json',
-            success: function (result) {
-                console.log(result);
-                deckID = result.deck_id;
-                startGame(result);
-                $("#start").attr("display","none");
-            },
+            success: preStart,
             error: function () {
                 alert('ERROR 01: retrieval error');
             }
@@ -29,13 +24,18 @@ $(document).ready(function() {
     });
 });
 
+function preStart (result) {
+    console.log(result);
+    deckID = result.deck_id;
+    startGame();
+    $("#start").attr("display","none");
+}
+
 function onLoad() {
     $("#gameControl").hide();
 }
 
-
-
-function startGame(res) {
+function startGame() {
     players = $('input:text').val();
     $.ajax({
         url: 'https://deckofcardsapi.com/api/deck/'+ deckID +'/draw/?count=' + players.toString(),
@@ -55,8 +55,8 @@ function startGame(res) {
 
 }
 
-function setRes(result) {
-    console.log(res/*ult*/);
+function setRes(res) {
+    console.log(res);
     //creates the players and displays them
     createFields();
     distributeFields();
