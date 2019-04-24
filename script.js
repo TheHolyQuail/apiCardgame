@@ -44,11 +44,6 @@ function startGame() {
         crossDomain: true,
         dataType: 'json',
         success: setRes,
-
-        //     function (result) {
-        //     res = result;
-        //     console.log(res/*ult*/);
-        // },
         error: function () {
             alert('ERROR 01: retrieval error');
         }
@@ -72,14 +67,16 @@ function setRes(res) {
             $('<img/>', {
                 'class': 'card',
                 'id': "card" + i.toString(),
-                'src': res.cards[i].image
+                'src': res.cards[i].image,
+                'width': 40
             }).appendTo('#player' + (i + 1).toString());
         }else{
             //for the computers cards (they are not always visible)
             $('<img/>', {
                 'class': 'card',
                 'id': "card" + i.toString(),
-                'src': res.cards[i].image
+                'src': res.cards[i].image,
+                'width': 40
             }).appendTo('#player' + (i + 1).toString());
         }
 
@@ -108,6 +105,25 @@ function end(){
 
 function AIround(){
     
+}
+
+function getCard(){
+
+}
+
+function addCard(card, player) {
+    $.ajax({
+        url: 'https://deckofcardsapi.com/api/deck/' + deckID + '/pile/'+ player +'/add/?cards=' + card,
+        type: 'GET',
+        crossDomain: true,
+        dataType: 'json',
+        success: function (result) {
+            console.log(result.piles[i]);
+        },
+        error: function () {
+            alert('ERROR 01: retrieval error');
+        }
+    });
 }
 
 function createFields() {
