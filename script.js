@@ -37,6 +37,7 @@ function onLoad() {
 
 function startGame() {
     players = $('input:text').val();
+    //console.log("deckID: " + deckID);
     $.ajax({
         url: 'https://deckofcardsapi.com/api/deck/'+ deckID +'/draw/?count=' + players.toString(),
         type: 'GET',
@@ -83,7 +84,7 @@ function setRes(res) {
         }
 
         $.ajax({
-            url: 'https://deckofcardsapi.com/api/deck/<<' + i.toString() + '>>/pile/<<pile_name>>/add/?cards=' + card,
+            url: 'https://deckofcardsapi.com/api/deck/' + deckID + '/pile/'+ i.toString() +'/add/?cards=' + card,
             type: 'GET',
             crossDomain: true,
             dataType: 'json',
