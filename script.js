@@ -22,6 +22,9 @@ $(document).ready(function() {
     $('#input').change(function() {
         players = $('#input').valueOf();
     });
+    //player controls
+    $("body").on("click", "#hit", playerDraw());
+    $("body").on("click", "#hold", AIturn());
 });
 
 function preStart (result) {
@@ -95,23 +98,64 @@ function setRes(res) {
     }
 }
 
-function draw(){
+//goes through each AI player doing their turn
+function AIturn(){
+    for(var i = 1; x < players;i++){
+
+    }
+}
+
+//ends the game by figuring out who won clearing the screen and displaying the scores
+function endGame(){
 
 }
 
-function end(){
+//runs when the player clicks draw
+function playerDraw(){
+    getPlayerCard()
+}
+//adds the players card to stuff
+function addPlayerCard(res){
+    card = res.cards[i].code;
 
+
+    //adds to the players visible cards
+    $('<img/>', {
+        'class': 'card',
+        //'id': "card" + 0.toString(),
+        'src': res.cards[0].image,
+        'width': 40
+    }).appendTo('#player' + (0 + 1).toString());
+
+    //adds card value to the players pile
+    $.ajax({
+        url: 'https://deckofcardsapi.com/api/deck/' + deckID + '/pile/'+ 0 +'/add/?cards=' + card,
+        type: 'GET',
+        crossDomain: true,
+        dataType: 'json',
+        success: function (result) {
+            console.log(result.piles[i]);
+        },
+        error: function () {
+            alert('ERROR 01: retrieval error');
+        }
+    });
+}
+//gets the players card
+function getPlayerCard(){
+    $.ajax({
+        url: 'https://deckofcardsapi.com/api/deck/'+ deckID +'/draw/?count=' + 1,
+        type: 'GET',
+        crossDomain: true,
+        dataType: 'json',
+        success: addPlayerCard,
+        error: function () {
+            alert('ERROR 01: retrieval error');
+        }
+    });
 }
 
-function AIround(){
-    
-}
-
-function getCard(){
-
-}
-
-function addCard(card, player) {
+/*function addCard(card, player) {
     $.ajax({
         url: 'https://deckofcardsapi.com/api/deck/' + deckID + '/pile/'+ player +'/add/?cards=' + card,
         type: 'GET',
@@ -125,6 +169,7 @@ function addCard(card, player) {
         }
     });
 }
+*/
 
 function createFields() {
     $('.field').remove();
