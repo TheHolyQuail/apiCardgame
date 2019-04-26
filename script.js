@@ -23,10 +23,11 @@ $(document).ready(function() {
         players = $('#input').valueOf();
     });
     //player controls
-    $("body").on("click", "#hit", playerDraw());
-    $("body").on("click", "#hold", AIturn());
+    $("#hit").on("click", playerDraw());
+    $("#hold").on("click", AIturn());
 });
 
+//sets up the deck id variable and starts the game
 function preStart (result) {
     console.log(result);
     deckID = result.deck_id;
@@ -34,10 +35,14 @@ function preStart (result) {
     $("#start").attr("display","none");
 }
 
+//sets up start screen
 function onLoad() {
+    $("#start").show();
+    $("#playerSelect").show();
     $("#gameControl").hide();
 }
 
+//draws the primary cards
 function startGame() {
     players = $('input:text').val();
     //console.log("deckID: " + deckID);
@@ -51,9 +56,9 @@ function startGame() {
             alert('ERROR 01: retrieval error');
         }
     });
-
 }
 
+//creates the playing field and gives each player their first card
 function setRes(res) {
     console.log(res);
     //creates the players and displays them
@@ -100,10 +105,55 @@ function setRes(res) {
 
 //goes through each AI player doing their turn
 function AIturn(){
-    for(var i = 1; x < players;i++){
-
+    var card;
+    for(var i = 1; i < players;i++){
+        card = getAiCard(i);
+        addAiCard(card, i);
     }
 }
+//gets the players card
+function getAiCard(player){
+    var card;
+    $.ajax({
+        url: 'https://deckofcardsapi.com/api/deck/'+ deckID +'/draw/?count=' + 1,
+        type: 'GET',
+        crossDomain: true,
+        dataType: 'json',
+        success:function(result){card = result.cards[player]},
+        error: function () {
+            alert('ERROR 01: retrieval error');
+        }
+    });
+    return card;
+}
+
+function addAiCard(res, i){
+    var card = res.cards[i].code;
+
+
+    //adds to the players visible cards
+    $('<img/>', {
+        'class': 'card',
+        //'id': "card" + 0.toString(),
+        'src': res.cards[i].image,
+        'width': 40
+    }).appendTo('#player' + (i + 1).toString());
+
+    //adds card value to the players pile
+    $.ajax({
+        url: 'https://deckofcardsapi.com/api/deck/' + deckID + '/pile/'+ i +'/add/?cards=' + card,
+        type: 'GET',
+        crossDomain: true,
+        dataType: 'json',
+        success: function (result) {
+            console.log(result.piles[i]);
+        },
+        error: function () {
+            alert('ERROR 01: retrieval error');
+        }
+    });
+}
+
 
 //ends the game by figuring out who won clearing the screen and displaying the scores
 function endGame(){
@@ -116,7 +166,7 @@ function playerDraw(){
 }
 //adds the players card to stuff
 function addPlayerCard(res){
-    card = res.cards[i].code;
+    card = res.cards[0].code;
 
 
     //adds to the players visible cards
