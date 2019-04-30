@@ -2,9 +2,16 @@
 var deckID;
 var players = 3;
 
+//sets up start screen
+function onLoad() {
+    $("#start").show();
+    $("#playerSelect").show();
+    $("#gameControl").hide();
+}
+
 $(document).ready(function() {
     //code for searching
-    $("body").on("click", "#start", function() {
+    $("#start").on("click", function() {
         $.ajax({
             url: 'https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1',
             type: 'GET',
@@ -28,18 +35,11 @@ $(document).ready(function() {
 });
 
 //sets up the deck id variable and starts the game
-function preStart (result) {
+function preStart(result) {
     console.log(result);
     deckID = result.deck_id;
     startGame();
-    $("#start").attr("display","none");
-}
-
-//sets up start screen
-function onLoad() {
-    $("#start").show();
-    $("#playerSelect").show();
-    $("#gameControl").hide();
+    $("#start").hide();
 }
 
 //draws the primary cards
@@ -108,7 +108,6 @@ function AIturn(){
     var card;
     for(var i = 1; i < players;i++){
         card = getAiCard(i);
-        addAiCard(card, i);
     }
 }
 //gets the players card
@@ -119,12 +118,14 @@ function getAiCard(player){
         type: 'GET',
         crossDomain: true,
         dataType: 'json',
-        success:function(result){card = result.cards[player]},
+        success:function(result){
+            card = result.cards[player];
+            addAiCard(card, player);
+        },
         error: function () {
             alert('ERROR 01: retrieval error');
         }
     });
-    return card;
 }
 
 function addAiCard(res, i){
