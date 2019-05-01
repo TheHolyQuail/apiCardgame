@@ -11,7 +11,7 @@ function onLoad() {
 
 $(document).ready(function() {
     //code for searching
-    $("#start").on("click", function() {
+    $("#start").click(function() {
         $.ajax({
             url: 'https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1',
             type: 'GET',
@@ -30,8 +30,8 @@ $(document).ready(function() {
         players = $('#input').valueOf();
     });
     //player controls
-    $("#hit").on("click", playerDraw());
-    $("#hold").on("click", AIturn());
+    $("#hit").on("click",playerDraw);
+    $("#hold").on("click",AIturn);
 });
 
 //sets up the deck id variable and starts the game
@@ -119,7 +119,7 @@ function getAiCard(player){
         crossDomain: true,
         dataType: 'json',
         success:function(result){
-            card = result.cards[player];
+            card = result.cards;
             addAiCard(card, player);
         },
         error: function () {
@@ -129,14 +129,14 @@ function getAiCard(player){
 }
 
 function addAiCard(res, i){
-    var card = res.cards[i].code;
+    var card = res.code;
 
 
     //adds to the players visible cards
     $('<img/>', {
         'class': 'card',
         //'id': "card" + 0.toString(),
-        'src': res.cards[i].image,
+        'src': res.image,
         'width': 40
     }).appendTo('#player' + (i + 1).toString());
 
@@ -185,7 +185,7 @@ function addPlayerCard(res){
         crossDomain: true,
         dataType: 'json',
         success: function (result) {
-            console.log(result.piles[i]);
+            //console.log(result.piles[i]);
         },
         error: function () {
             alert('ERROR 01: retrieval error');
