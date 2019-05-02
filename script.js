@@ -110,7 +110,7 @@ function AIturn(){
         card = getAiCard(i);
     }
 }
-//gets the players card
+//gets the AI players' card
 function getAiCard(player){
     var card;
     $.ajax({
