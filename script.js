@@ -14,8 +14,8 @@ class Player {
     store(card){
         console.log(this.name + "gets a card");
 
-        this.cards.append(card.code[0]);
-        this.cardPics.append(card.image);
+        this.cards.append(card);/*.code[0]*/
+        //this.cardPics.append(card.image);
     }
 
     getScore() {
@@ -151,6 +151,7 @@ function setRes(res) {
 
             Player(i.toString(), true, card);
         }
+        console.log(result.piles[i]);
         /*
         $.ajax({
             url: 'https://deckofcardsapi.com/api/deck/' + deckID + '/pile/'+ i.toString() +'/add/?cards=' + card,
@@ -206,18 +207,21 @@ function addAiCard(res, i){
     }).appendTo('#player' + (i + 1).toString());
 
     //adds card value to the players pile
+    i.toString().store(card);
+    /*
     $.ajax({
         url: 'https://deckofcardsapi.com/api/deck/' + deckID + '/pile/'+ i +'/add/?cards=' + card,
         type: 'GET',
         crossDomain: true,
         dataType: 'json',
         success: function (result) {
-            console.log(result.piles[i]);
+
         },
         error: function () {
             alert('ERROR 01: retrieval error');
         }
     });
+    */
 }
 
 
@@ -228,13 +232,11 @@ function endGame(){
 
 //runs when the player clicks draw
 function playerDraw(){
-    console.log('https://deckofcardsapi.com/api/deck/' + deckID + '/pile/'+ 0 +'/list');
+    console.log("player score: " + "0".getScore());
+    drawStart("0".getScore());
 }
 
-function drawStart(playerCards){
-    console.log(playerCards);
-
-
+function drawStart(playerScore){
     if(playerScore < 21) {
         getPlayerCard();
     } else{
@@ -256,6 +258,8 @@ function addPlayerCard(res){
     }).appendTo('#player' + (0 + 1).toString());
 
     //adds card value to the players pile
+    i.toString().store(card);
+    /*
     $.ajax({
         url: 'https://deckofcardsapi.com/api/deck/' + deckID + '/pile/'+ 0 +'/add/?cards=' + card,
         type: 'GET',
@@ -268,6 +272,7 @@ function addPlayerCard(res){
             alert('ERROR 01: retrieval error');
         }
     });
+    */
 }
 //gets the players card
 function getPlayerCard(){
