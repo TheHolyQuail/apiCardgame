@@ -2,6 +2,67 @@
 var deckID;
 var players = 3;
 
+class Player {
+    constructor(name, type, firstCard) {
+        this.name = name;
+        //boolean true if AI false if human
+        this.type = type;
+        this.score = 0;
+        this.cards = [firstCard];
+    }
+
+    store(card){
+        console.log(this.name + "gets a card");
+
+        this.cards.append(card.code[0]);
+        this.cardPics.append(card.image);
+    }
+
+    getScore() {
+        var x;
+        var aCount = 0;
+        for (var i = 0; i < cards.length; i++){
+            if (cards[i] == "K" || cards[i] == "Q" || cards[i] == "J") {
+                x = 10;
+            } else if (cards[i] == "A") {
+                aCount++;
+            } else{
+                x = parseInt(cards[i]);
+            }
+            this.score += x;
+        }
+        for (var ii = 0; ii < aCount; ii++){
+            if(aCount == 1){
+                if(this.score <= 10) {
+                    this.score += 11;
+                } else {
+                    this.score += 1;
+                }
+            }else if(aCount == 2){
+                if(this.score <= 9) {
+                    this.score += 11;
+                } else {
+                    this.score += 1;
+                }
+            }else if(aCount == 3){
+                if(this.score <= 8) {
+                    this.score += 11;
+                } else {
+                    this.score += 1;
+                }
+            }else{
+                if(this.score <= 7) {
+                    this.score += 11;
+                } else {
+                    this.score += 1;
+                }
+            }
+        }
+        console.log(this.name + " : " + this.score);
+        return this.score;
+    }
+}
+
 //sets up start screen
 function onLoad() {
     $("#start").show();
@@ -69,7 +130,6 @@ function setRes(res) {
     var card;
     for(var i = 0; i < players; i++) {
         card = res.cards[i].code;
-
         if(i == 0){
             //for the players cards (they are always visible)
             $('<img/>', {
@@ -78,6 +138,8 @@ function setRes(res) {
                 'src': res.cards[i].image,
                 'width': 40
             }).appendTo('#player' + (i + 1).toString());
+
+            Player(i.toString(), false, card);
         }else{
             //for the computers cards (they are not always visible)
             $('<img/>', {
@@ -86,8 +148,10 @@ function setRes(res) {
                 'src': res.cards[i].image,
                 'width': 40
             }).appendTo('#player' + (i + 1).toString());
-        }
 
+            Player(i.toString(), true, card);
+        }
+        /*
         $.ajax({
             url: 'https://deckofcardsapi.com/api/deck/' + deckID + '/pile/'+ i.toString() +'/add/?cards=' + card,
             type: 'GET',
@@ -100,6 +164,7 @@ function setRes(res) {
                 alert('ERROR 01: retrieval error');
             }
         });
+        */
     }
 }
 
@@ -163,12 +228,24 @@ function endGame(){
 
 //runs when the player clicks draw
 function playerDraw(){
-    getPlayerCard()
+    console.log('https://deckofcardsapi.com/api/deck/' + deckID + '/pile/'+ 0 +'/list');
+}
+
+function drawStart(playerCards){
+    console.log(playerCards);
+
+
+    if(playerScore < 21) {
+        getPlayerCard();
+    } else{
+        AIturn();
+    }
 }
 //adds the players card to stuff
 function addPlayerCard(res){
     card = res.cards[0].code;
 
+    //adds to the players score
 
     //adds to the players visible cards
     $('<img/>', {
@@ -206,22 +283,8 @@ function getPlayerCard(){
     });
 }
 
-/*function addCard(card, player) {
-    $.ajax({
-        url: 'https://deckofcardsapi.com/api/deck/' + deckID + '/pile/'+ player +'/add/?cards=' + card,
-        type: 'GET',
-        crossDomain: true,
-        dataType: 'json',
-        success: function (result) {
-            console.log(result.piles[i]);
-        },
-        error: function () {
-            alert('ERROR 01: retrieval error');
-        }
-    });
-}
-*/
 
+//the graphics organizing part
 function createFields() {
     $('.field').remove();
     var container = $('#container');
