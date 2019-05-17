@@ -139,7 +139,7 @@ function setRes(res) {
                 'width': 40
             }).appendTo('#player' + (i + 1).toString());
 
-            Player(i.toString(), false, card);
+            new Player(i.toString(), false, card);
         }else{
             //for the computers cards (they are not always visible)
             $('<img/>', {
@@ -149,7 +149,7 @@ function setRes(res) {
                 'width': 40
             }).appendTo('#player' + (i + 1).toString());
 
-            Player(i.toString(), true, card);
+            new Player(i.toString(), true, card);
         }
         console.log(result.piles[i]);
         /*
